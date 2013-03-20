@@ -1,0 +1,32 @@
+#! /usr/bin/env python
+#This is the front end Module for the NEEShubloader. This file is meant to be run much like an executable
+#or a .sh file. This basically gives a sort of text-based command prompt that allows you to decide what to do.
+import argparse
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-ts", type=str, required=True,
+                    help="Enter date in MM/DD/YYYY format from start date of what you want to upload.")
+parser.add_argument("-te", type=str, required=True,
+                    help="Enter date in MM/DD/YYYY format for end date of what you want to upload.")
+parser.add_argument("-x", type=str, required=True,
+                    help="Pick a list of experiments to upload to.")
+parser.add_argument("--localcache", help="Doesn't update cache before uploading and uses latest local cache.",
+                    action="store_true")
+
+args=parser.parse_args()
+
+
+import bin.utils as utils
+import bin.central_operations as centop
+
+start_time  = utils.to_epoch(args.ts)
+end_time    = utils.to_epoch(args.te)
+experiments = args.x.split(',')
+
+
+for experiment in experiments:
+    if args.localcache == False:
+        centop.check_cache_place_trials(experiment, start_time, end_time)
+    else:
+        centop.place_trials_default(experiment, start_time, end_time)

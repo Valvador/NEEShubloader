@@ -1,0 +1,21 @@
+#! /usr/bin/env python
+#This is the front end Module for the NEEShubloader. This file is meant to be run much like an executable
+#Used primarily for deleting trials.
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-trials", type=str, required=True,
+                    help="Enter a range (ex: 122-130) or list (ex: 122,123,125) of Trials to delete.")
+                    
+parser.add_argument("-x", type=str, required=True,
+                    help="Pick an experiment number from which to delete.")
+
+
+args=parser.parse_args()
+
+
+
+import bin.secondary_operations as secop
+
+secop.delete_trials(args.x, args.trials)
